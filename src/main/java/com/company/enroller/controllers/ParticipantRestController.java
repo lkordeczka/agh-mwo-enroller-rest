@@ -56,7 +56,7 @@ public class ParticipantRestController {
 			return new ResponseEntity("Unable to create. A participant with login " + login + " already exist.", HttpStatus.NOT_FOUND);
 	 }
 	 	 
-//	 @RequestMapping(value = "/{meetingid/participant/{participantId}}", method = RequestMethod.PUT)
+//	 @RequestMapping(value = "/{meetingid/participants}", method = RequestMethod.PUT)
 //	 public ResponseEntity<?> editParticipant(@PathVariable("id") String login){
 //		 Participant participant = participantService.getUserByID(login);
 //		 Participant foundParticipant = participantService.getUserByID(participant.getLogin());
