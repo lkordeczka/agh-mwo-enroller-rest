@@ -25,13 +25,13 @@ public class Meeting {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column
+	@Column(nullable = true)
 	private String title;
 
-	@Column
+	@Column(nullable = true)
 	private String description;
 
-	@Column
+	@Column(nullable = true)
 	private String date;
 
 	@JsonIgnore
