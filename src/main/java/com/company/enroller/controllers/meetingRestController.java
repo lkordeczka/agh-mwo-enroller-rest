@@ -22,6 +22,7 @@ public class meetingRestController {
 
 	@Autowired
 	MeetingService meetingService;
+	@Autowired
 	ParticipantService participantService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
@@ -44,38 +45,47 @@ public class meetingRestController {
 		meetingService.add(meeting);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.CREATED);
 	 }
-	 
-	//	curl -d '{}' http://localhost:8080/meetings/14/user10
-	@RequestMapping(value = "/{meetingID}/{participantLogin}", method = RequestMethod.POST)
+	
+	//	curl -H "Content-Type: application/json" -d '{"login":"JestemPrzypisanyDoSpotkania7", "password": "password"}' localhost:8080/meetings/12/participant
+	//	curl -d '{}' http://localhost:8080/meetings/14
+	@RequestMapping(value = "/{meetingID}/participant", method = RequestMethod.POST)
 	public ResponseEntity<?> addParticipant(
 			@PathVariable("meetingID") Long meetingID,
 			@RequestBody Participant participant){
 		
 		Meeting meeting = meetingService.getByID(meetingID);
-		 
+	
 		if (meeting == null) {
 			return new ResponseEntity("Unable to add. A meeting with id " + meetingID + " not exist.", HttpStatus.NOT_FOUND);
 		}
-
+		Participant foundParticipant = participantService.getUserByID(participant.getLogin());
+		if (foundParticipant != null){
+			return new ResponseEntity("Unable to create. A participant with login " + participant.getLogin() + " already exist.", HttpStatus.CONFLICT);
+		}
 		
+		participantService.add(participant);
+		meetingService.addParticipant(participant, meeting);
 		
-//		
-//		foundMeeting.addParticipant(foundParticipant);
-		
-		
-		
-//		if (foundParticipant != null){
-//			String password;
-//			participant.setPassword(password);
-//			participantService.updateParticipant(participant);
-//			return new ResponseEntity<Participant>(participant, HttpStatus.OK);
-//		}
-//		return new ResponseEntity("the participant " + foundParticipant.getLogin() + " was added to the meeting" + foundMeeting.getTitle() + " already exist.", HttpStatus.OK);
+//		meeting.addParticipant(participant);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	 
-	 
-	 
+	@RequestMapping(value = "/{meetingID}/participants", method = RequestMethod.GET)
+	public ResponseEntity<?> showParticipants(@PathVariable("meetingID") Long meetingID){
+		
+		Meeting meeting = meetingService.getByID(meetingID);
+	
+		if (meeting == null) {
+			return new ResponseEntity("Unable to add. A meeting with id " + meetingID + " not exist.", HttpStatus.NOT_FOUND);
+		}
+		Collection<Participant> participants = meetingService.participantsList(meeting);
+		if (participants.size() > 0) {
+			return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
+		} else {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		
+	}
 	 
 	 
 	

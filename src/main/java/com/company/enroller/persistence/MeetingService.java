@@ -25,7 +25,7 @@ public class MeetingService {
 	}
 
 	public Meeting getByID(Long id) {
-		System.out.println(">>>>>>> " + id + " <<<<<<<<<");
+//		System.out.println(">>>>>>> " + id + " <<<<<<<<<");
 //		String hql = "FROM Meeting M WHERE M.id=" + id;
 //		Query query = connector.getSession().createQuery(hql);
 //		return query.list();
@@ -38,6 +38,15 @@ public class MeetingService {
 		transaction.commit();
 	}
 	
+	public void addParticipant(Participant participant, Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		meeting.addParticipant(participant);
+		connector.getSession().update(meeting);
+		transaction.commit();
+	}
 	
+	public Collection<Participant> participantsList(Meeting meeting) {
+		return meeting.getParticipants();
+	}
 	
 }
