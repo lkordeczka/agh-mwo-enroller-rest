@@ -25,11 +25,16 @@ public class MeetingService {
 	}
 
 	public Meeting getByID(Long id) {
-//		System.out.println(">>>>>>> " + id + " <<<<<<<<<");
 //		String hql = "FROM Meeting M WHERE M.id=" + id;
 //		Query query = connector.getSession().createQuery(hql);
 //		return query.list();
 		return (Meeting) connector.getSession().get(Meeting.class, id);
+	}
+	
+	public void remove(Meeting meeting) {		
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().delete(meeting);
+		transaction.commit();
 	}
 	
 	public void add(Meeting meeting) {
@@ -45,8 +50,30 @@ public class MeetingService {
 		transaction.commit();
 	}
 	
-	public Collection<Participant> participantsList(Meeting meeting) {
+	public void removeParticipant(Participant participant, Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		meeting.removeParticipant(participant);
+		connector.getSession().update(meeting);
+		transaction.commit();
+	}
+		
+	public Collection<Participant> participantsList(Meeting meeting) {		
 		return meeting.getParticipants();
 	}
 	
+	public Participant getParticipantByLogin(Meeting meeting, String login) {
+		for (Participant participant : participantsList(meeting)) {
+			if (participant.getLogin() == login) {
+				return participant;
+			}
+		}
+		return null;
+	}
+	
+	public void updateMeeting(Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().update(meeting);
+		transaction.commit();
+	}
+
 }

@@ -28,7 +28,7 @@ public class ParticipantRestController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getMeeting(@PathVariable("id") String login){
+	public ResponseEntity<?> getParticipant(@PathVariable("id") String login){
 		Participant participant = participantService.getUserByID(login);
 		if (participant == null){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -56,20 +56,6 @@ public class ParticipantRestController {
 			return new ResponseEntity("Unable to create. A participant with login " + login + " already exist.", HttpStatus.NOT_FOUND);
 	 }
 	 	 
-//	 @RequestMapping(value = "/{meetingid/participants}", method = RequestMethod.PUT)
-//	 public ResponseEntity<?> editParticipant(@PathVariable("id") String login){
-//		 Participant participant = participantService.getUserByID(login);
-//		 Participant foundParticipant = participantService.getUserByID(participant.getLogin());
-//			if (foundParticipant != null){
-//				String password;
-//				participant.setPassword(password);
-//				participantService.updateParticipant(participant);
-//				return new ResponseEntity<Participant>(participant, HttpStatus.OK);
-//			}
-//			return new ResponseEntity("Unable to create. A participant with login " + participant.getLogin() + " already exist.", HttpStatus.CONFLICT);
-//	 }
-// test
-	 
 	 @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	 public ResponseEntity<?> editParticipant(
 			 @PathVariable("id") String login,
@@ -81,10 +67,6 @@ public class ParticipantRestController {
 		participant.setPassword(incomingParticipant.getPassword());
 		participantService.updateParticipant(participant);
 		return new ResponseEntity<Participant>(participant, HttpStatus.OK);
-//				String password;
-//				participant.setPassword(password);
-//				participantService.updateParticipant(participant);
-//				return new ResponseEntity<Participant>(participant, HttpStatus.OK);
 	 }
 
 }
