@@ -54,6 +54,12 @@ public class MeetingService {
 		Transaction transaction = connector.getSession().beginTransaction();
 		meeting.removeParticipant(participant);
 		connector.getSession().update(meeting);
+		
+//		String hql = "delete from meeting_participant where participant_login = :participant_login";
+//		Query query = connector.getSession().createQuery(hql);
+//		query.setParameter("participant_login", participant.getLogin());
+//		query.executeUpdate();		
+		
 		transaction.commit();
 	}
 		
@@ -63,7 +69,7 @@ public class MeetingService {
 	
 	public Participant getParticipantByLogin(Meeting meeting, String login) {
 		for (Participant participant : participantsList(meeting)) {
-			if (participant.getLogin() == login) {
+			if (participant.getLogin().equals(login)) {
 				return participant;
 			}
 		}

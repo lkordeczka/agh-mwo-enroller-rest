@@ -12,7 +12,7 @@
 		<property name="connection.username"></property>
 		<property name="connection.password"></property>
 		
-		<property name="hibernate.hbm2ddl.auto">update</property> <!-- create - utworzy bazę jeśli jej nie będzie; update - bedzie powodować modyfikację istniejącego schematu bazy danych -->
+		<!-- <property name="hibernate.hbm2ddl.auto">update</property> create - utworzy bazę jeśli jej nie będzie; update - bedzie powodować modyfikację istniejącego schematu bazy danych -->
 	
 		<mapping class="com.company.enroller.model.Meeting"/>
 		<mapping class="com.company.enroller.model.Participant"/>

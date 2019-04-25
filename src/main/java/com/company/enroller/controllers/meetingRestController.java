@@ -126,7 +126,7 @@ public class meetingRestController {
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
 	 }
 	 
-//	curl -H "Content-Type: application/json" -d '{"login":"JestemPrzypisanyDoSpotkania7", "password": "password"}' localhost:8080/meetings/12/participant
+//	curl -H "Content-Type: application/json" -d '{}' -X DELETE localhost:8080/meetings/12/JestemPrzypisanyDoSpotkania4
 	@RequestMapping(value = "/{meetingID}/{participantLogin}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeParticipant(
 			@PathVariable("meetingID") Long meetingID,
