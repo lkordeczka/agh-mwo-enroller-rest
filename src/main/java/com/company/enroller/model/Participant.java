@@ -1,5 +1,6 @@
 package com.company.enroller.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
+
+import org.hibernate.loader.custom.Return;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,8 +27,8 @@ public class Participant {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinTable(name = "meeting_participant", joinColumns = { @JoinColumn(name = "participant_login") }, inverseJoinColumns = {
 			@JoinColumn(name = "meeting_id") })
-	Set<Participant> participants = new HashSet<>();
-	
+	Set<Meeting> meetings = new HashSet<>();
+		
 	@Id
 	private String login;
 
@@ -45,5 +49,18 @@ public class Participant {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	@PreRemove
+	public void removeMeeting(Meeting meeting) {
+		this.meetings.remove(meeting);
+	}
+	
+	public void addMeeting(Meeting meeting) {
+		this.meetings.add(meeting);
+	}
+	
+	public Collection<Meeting> getMeeting() {
+		return meetings;
 	}
 }

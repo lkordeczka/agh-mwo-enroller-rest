@@ -31,6 +31,12 @@ public class MeetingService {
 		return (Meeting) connector.getSession().get(Meeting.class, id);
 	}
 	
+//	public Meeting findMeetingByParticipantLogin(String login) {
+//		String hql = "SELECT * FROM Meeting M WHERE M.id=" + login;
+//		Query query = connector.getSession().createQuery(hql);
+//		return query.list();
+//	}
+	
 	public void remove(Meeting meeting) {		
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().delete(meeting);
@@ -47,20 +53,31 @@ public class MeetingService {
 		Transaction transaction = connector.getSession().beginTransaction();
 		meeting.addParticipant(participant);
 		connector.getSession().update(meeting);
+//		connector.getSession().update(participant);
 		transaction.commit();
+		participant.addMeeting(meeting);
 	}
 	
+//	public void removeParticipant(Participant participant, Meeting meeting) {
+//		Transaction transaction = connector.getSession().beginTransaction();
+//		meeting.removeParticipant(participant);
+//		connector.getSession().update(meeting);
+//		
+////		String hql = "delete from meeting_participant where participant_login = :participant_login";
+////		Query query = connector.getSession().createQuery(hql);
+////		query.setParameter("participant_login", participant.getLogin());
+////		query.executeUpdate();		
+//		
+//		transaction.commit();
+//	}
+	
 	public void removeParticipant(Participant participant, Meeting meeting) {
-		Transaction transaction = connector.getSession().beginTransaction();
-		meeting.removeParticipant(participant);
-		connector.getSession().update(meeting);
-		
-//		String hql = "delete from meeting_participant where participant_login = :participant_login";
-//		Query query = connector.getSession().createQuery(hql);
-//		query.setParameter("participant_login", participant.getLogin());
-//		query.executeUpdate();		
-		
-		transaction.commit();
+	    Transaction transaction = connector.getSession().beginTransaction();
+	    meeting.removeParticipant(participant);
+	    participant.removeMeeting(meeting);
+	    connector.getSession().update(meeting);
+	    connector.getSession().update(participant);
+	    transaction.commit();
 	}
 		
 	public Collection<Participant> participantsList(Meeting meeting) {		

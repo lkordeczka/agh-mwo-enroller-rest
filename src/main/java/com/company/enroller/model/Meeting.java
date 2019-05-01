@@ -85,6 +85,5 @@ public class Meeting {
 
 	public Collection<Participant> getParticipants() {
 		return participants;
-	}
-
+	}	
 }
